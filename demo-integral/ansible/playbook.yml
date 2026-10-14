@@ -1,0 +1,20 @@
+# demo-integral/ansible/playbook.yml
+- name: Orquestar la demo integral
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Levantar Moto
+      community.docker.docker_compose_v2:
+        project_src: "{{ playbook_dir }}/../.."
+        state: present
+
+    - name: Aplicar Terraform
+      community.general.terraform:
+        project_path: "{{ playbook_dir }}/.."
+        state: present
+        force_init: true
+
+    - name: Instalar metrics-server en el cluster
+      kubernetes.core.k8s:
+        state: present
+        src: "{{ playbook_dir }}/metrics-server.yaml"

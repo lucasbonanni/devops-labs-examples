@@ -1,0 +1,29 @@
+# Configuración mínima para que kube-prometheus-stack
+# funcione en un cluster kind de un solo nodo worker,
+# sin necesidad de almacenamiento persistente (PVC) ni
+# recursos grandes de CPU/memoria.
+
+grafana:
+  enabled: true
+  adminPassword: admin
+  service:
+    type: NodePort
+    nodePort: 30090
+
+prometheus:
+  prometheusSpec:
+    retention: 1d
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+    storageSpec: {}   # sin PVC, usa almacenamiento efímero
+
+alertmanager:
+  enabled: false   # para simplificar la demo, no necesitamos alertas
+
+kubeStateMetrics:
+  enabled: true
+
+nodeExporter:
+  enabled: true
