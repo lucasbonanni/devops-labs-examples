@@ -82,6 +82,22 @@ resource "kubernetes_deployment_v1" "demo_app" {
     template {
       metadata { labels = { app = "demo-app" } }
       spec {
+        toleration {
+          key      = "node-role.kubernetes.io/control-plane"
+          operator = "Exists"
+          effect   = "NoSchedule"
+        }
+
+        topology_spread_constraint {
+          max_skew           = 1
+          topology_key       = "kubernetes.io/hostname"
+          when_unsatisfiable = "DoNotSchedule"
+
+          label_selector {
+            match_labels = { app = "demo-app" }
+          }
+        }
+
         container {
           name              = "demo-app"
           image             = var.app_image_name
@@ -125,6 +141,22 @@ resource "kubernetes_deployment_v1" "nginx" {
     template {
       metadata { labels = { app = "nginx" } }
       spec {
+        toleration {
+          key      = "node-role.kubernetes.io/control-plane"
+          operator = "Exists"
+          effect   = "NoSchedule"
+        }
+
+        topology_spread_constraint {
+          max_skew           = 1
+          topology_key       = "kubernetes.io/hostname"
+          when_unsatisfiable = "DoNotSchedule"
+
+          label_selector {
+            match_labels = { app = "nginx" }
+          }
+        }
+
         container {
           image = "nginx:alpine"
           name  = "nginx"
@@ -159,5 +191,6 @@ resource "helm_release" "monitoring" {
   chart            = "kube-prometheus-stack"
   namespace        = "monitoring"
   create_namespace = true
+  timeout          = 600
   values           = [file("${path.module}/monitoring/values-prometheus.yaml")]
 }

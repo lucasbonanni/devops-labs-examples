@@ -8,5 +8,5 @@ variable "app_image_name" {
 
 variable "enable_monitoring" {
   type    = bool
-  default = false
+  default = true
 }
