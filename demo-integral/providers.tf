@@ -66,7 +66,13 @@ resource "kind_cluster" "demo_eks" {
         host_port      = 30080
         protocol       = "TCP"
       }
-      
+
+      extra_port_mappings {
+        container_port = 30081
+        host_port      = 30081
+        protocol       = "TCP"
+      }
+
       extra_port_mappings {
         container_port = 30090
         host_port      = 30090

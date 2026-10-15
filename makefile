@@ -1,7 +1,7 @@
 .PHONY: up validate down
 
 up:
-	docker compose up -d
+	docker compose up -d --wait
 	cd demo-integral && terraform init && terraform apply -auto-approve
 	kind export kubeconfig --name demo-eks-cluster
 

@@ -6,6 +6,10 @@ output "demo_app_url" {
   value = "http://localhost:30080"
 }
 
+output "nginx_url" {
+  value = "http://localhost:30081"
+}
+
 output "lambda_invoke_command" {
   value = "aws --endpoint-url=http://localhost:5000 lambda invoke --function-name demo-lambda /tmp/out.json && cat /tmp/out.json"
 }
